@@ -5,7 +5,7 @@ import java.util.Calendar;
  * web-server log file.
  * Individual fields are made available via
  * accessors such as getHour() and getMinute().
- * 
+ *
  * @author David J. Barnes and Michael Kölling.
  * @version    2016.02.29
  */
@@ -16,7 +16,7 @@ public class LogEntry implements Comparable<LogEntry>
     private int[] dataValues;
     // The equivalent Calendar object for the log time.
     private Calendar when;
-    
+
     // At which index in dataValues the different fields
     // from a log line are stored.
     private static final int YEAR = 0, MONTH = 1, DAY = 2,
@@ -25,7 +25,7 @@ public class LogEntry implements Comparable<LogEntry>
     // seconds or a status code, then this value must be increased
     // to match.
     private static final int NUMBER_OF_FIELDS = 5;
-                      
+
     /**
      * Decompose a log line so that the individual fields
      * are available.
@@ -42,7 +42,7 @@ public class LogEntry implements Comparable<LogEntry>
         tokenizer.tokenize(logline,dataValues);
         setWhen();
     }
-    
+
     /**
      * Create a LogEntry from the individual components.
      * @param year The year
@@ -62,11 +62,27 @@ public class LogEntry implements Comparable<LogEntry>
         dataValues[MINUTE] = minute;
         setWhen();
     }
-    
+
     /**
      * Return the hour.
      * @return The hour field from the log line.
      */
+
+    public int getYear()
+    {
+      return dataValues[YEAR];
+    }
+
+    public int getMonth()
+    {
+      return dataValues[MONTH];
+    }
+
+    public int getDay()
+    {
+      return dataValues[DAY];
+    }
+
     public int getHour()
     {
         return dataValues[HOUR];
@@ -80,7 +96,7 @@ public class LogEntry implements Comparable<LogEntry>
     {
         return dataValues[MINUTE];
     }
-    
+
     /**
      * Create a string representation of the data.
      * This is not necessarily identical with the
@@ -101,7 +117,7 @@ public class LogEntry implements Comparable<LogEntry>
         // Drop any trailing space.
         return buffer.toString().trim();
     }
-    
+
     /**
      * Compare the date/time combination of this log entry
      * with another.
@@ -115,7 +131,7 @@ public class LogEntry implements Comparable<LogEntry>
         // Use the equivalent Calendars comparison method.
         return when.compareTo(otherEntry.getWhen());
     }
-    
+
     /**
      * Return the Calendar object representing this event.
      * @return The Calendar for this event.
@@ -136,5 +152,5 @@ public class LogEntry implements Comparable<LogEntry>
                  dataValues[MONTH] - 1, dataValues[DAY] - 1,
                  dataValues[HOUR], dataValues[MINUTE]);
     }
-    
+
 }

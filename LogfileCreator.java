@@ -3,7 +3,7 @@ import java.util.*;
 
 /**
  * A class for creating log files of random data.
- * 
+ *
  * @author David J. Barnes and Michael Kölling
  * @version    2016.02.29
  */
@@ -18,7 +18,7 @@ public class LogfileCreator
     {
         rand = new Random();
     }
-    
+
     /**
      * Create a file of random log entries.
      * @param filename The file to write.
@@ -28,7 +28,7 @@ public class LogfileCreator
     public boolean createFile(String filename, int numEntries)
     {
         boolean success = false;
-        
+
         if(numEntries > 0) {
             try (FileWriter writer = new FileWriter(filename)) {
                 LogEntry[] entries = new LogEntry[numEntries];
@@ -40,24 +40,24 @@ public class LogfileCreator
                     writer.write(entries[i].toString());
                     writer.write('\n');
                 }
-                
+
                 success = true;
             }
             catch(IOException e) {
                 System.err.println("There was a problem writing to " + filename);
             }
-                
+
         }
         return success;
     }
-    
+
     /**
      * Create a single (random) entry for a log file.
      * @return A log entry containing random data.
      */
     public LogEntry createEntry()
     {
-        int year = 2016;
+        int year = 2014 + rand.nextInt(5);
         int month = 1 + rand.nextInt(12);
         // Avoid the complexities of days-per-month.
         int day = 1 + rand.nextInt(28);
