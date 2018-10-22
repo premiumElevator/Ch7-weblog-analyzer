@@ -10,29 +10,32 @@ public class LogAnalyzer
     private int[] hourCounts;
     private int[] dayCounts;
     private int[] monthCounts;
+    private int[] yearCounts;
     // Use a LogfileReader to access the data.
     private LogfileReader reader;
 
     /**
      * Create an object to analyze hourly web accesses.
      */
-    public LogAnalyzer()
-    {
-        // Create the array object to hold the hourly
-        // access counts.
-        hourCounts = new int[24];
-        dayCounts = new int[32];
-        monthCounts = new int[12];
-        // Create the reader to obtain the data.
-        reader = new LogfileReader();
-    }
+   public LogAnalyzer()
+   {
+      // Create the array object to hold the hourly
+      // access counts.
+      hourCounts = new int[24];
+      dayCounts = new int[29];
+      monthCounts = new int[13];
+      yearCounts = new int[5];
+      // Create the reader to obtain the data.
+      reader = new LogfileReader();
+   }
 
     public LogAnalyzer(String webLog)
     {
 
       hourCounts = new int[24];
-      dayCounts = new int[32];
-      monthCounts = new int[12];
+      dayCounts = new int[29];
+      monthCounts = new int[13];
+      yearCounts = new int[5];
 
       reader = new LogfileReader(webLog);
     }
@@ -48,6 +51,17 @@ public class LogAnalyzer
 
         return total;
     }
+
+    public void totalAccessesPerMonth()
+    {
+
+       System.out.println("Month: Count");
+       for(int month = 1; month < monthCounts.length; month++) {
+           System.out.println(month + ": " + monthCounts[month]);
+       }
+
+    }
+
 
     public int busiestTwoHours()
     {
@@ -65,19 +79,6 @@ public class LogAnalyzer
       return hourCounts[index];
     }
 
-    public int busiestDay()
-    {
-      int index = 0;
-
-      for(int day = 0; day < dayCounts.length; day++)
-      {
-        if(dayCounts[day] > dayCounts[index])
-        {
-          index = day;
-        }
-      }
-      return index;
-    }
 
     public int busiestHour()
     {
@@ -107,9 +108,44 @@ public class LogAnalyzer
       return index;
     }
 
+   public int busiestDay()
+   {
+      int index = 0;
+
+      for(int day = 0; day < dayCounts.length; day++)
+      {
+        if(dayCounts[day] > dayCounts[index])
+        {
+            index = day;
+        }
+      }
+     return index;
+   }
+
+
+    public int quietestDay()
+    {
+       int index = busiestDay();
+
+       for(int day = 1; day < dayCounts.length; day++)
+       {
+        if(dayCounts[index] > dayCounts[day])
+        {
+           index = day;
+        }
+       }
+       return index;
+    }
+
+
     /**
      * Analyze the hourly access data from the log file.
      */
+    public void test()
+    {
+
+
+    }
     public void analyzeHourlyData()
     {
         while(reader.hasNext()) {
@@ -117,6 +153,7 @@ public class LogAnalyzer
             int hour = entry.getHour();
             hourCounts[hour]++;
         }
+        reader.reset();
     }
     public void analyzeDailyData()
     {
@@ -125,7 +162,29 @@ public class LogAnalyzer
             int day = entry.getDay();
             dayCounts[day]++;
         }
+        reader.reset();
     }
+
+   public void analyzeMonthlyData()
+   {
+      while(reader.hasNext()) {
+           LogEntry entry = reader.next();
+           int month = entry.getMonth();
+           monthCounts[month+1]++;
+      }
+      reader.reset();
+   }
+
+   public void analyzeYearlyData()
+   {
+      while(reader.hasNext()) {
+           LogEntry entry = reader.next();
+           int year = entry.getYear();
+           yearCounts[year-2014]++;
+      }
+
+      reader.reset();
+   }
 
 
     /**
@@ -149,6 +208,15 @@ public class LogAnalyzer
         }
     }
 
+    public void printYearlyCounts()
+    {
+        System.out.println("year: Count");
+        int yearDisplay = 2014;
+        for(int year = 0; year < yearCounts.length; year++) {
+            System.out.println(yearDisplay + ": " + yearCounts[year]);
+            yearDisplay++;
+        }
+    }
     /**
      * Print the lines of data read by the LogfileReader
      */
